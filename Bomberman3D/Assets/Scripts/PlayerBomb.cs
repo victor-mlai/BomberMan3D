@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerBomb : MonoBehaviour {
 
     public GameObject bombPrefab;
-    public int bombRange = 1;
+    public float bombRange;
 
     // Use this for initialization
     void Start () {
@@ -23,16 +23,17 @@ public class PlayerBomb : MonoBehaviour {
 
     void DropBomb()
     {
-        CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
+        // don't mind the position formula ...
         Vector3 position = new Vector3(
             (Mathf.Floor((gameObject.transform.position.x) / 2) + Mathf.Ceil((gameObject.transform.position.x) / 2)),
-            //Mathf.RoundToInt(gameObject.transform.position.x),
-            capsuleCollider.height / 2,
+            GetComponent<CapsuleCollider>().height / 2,
             (Mathf.Floor((gameObject.transform.position.z) / 2) + Mathf.Ceil((gameObject.transform.position.z) / 2))
-            //Mathf.RoundToInt(gameObject.transform.position.z)
             );
 
+        // Creates a bomb object at the specified position with no rotation
         GameObject newBomb = Instantiate(bombPrefab, position, Quaternion.identity);
-        newBomb.GetComponent<BombController>().bombRange = bombRange;
+
+        // Set bombs' range
+        newBomb.GetComponent<BombController>().SetBombRange(bombRange);
     }
 }
