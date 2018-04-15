@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour {
 
     [SerializeField]
     private float Speed = 5f;
+
     public Camera FPCamera;
 
 	// Use this for initialization

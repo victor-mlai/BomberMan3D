@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114869576520126798}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -259,7 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bombPrefab: {fileID: 1074927380792658, guid: 69ca4d88976087a42a9292d4241fb993, type: 2}
-  bombRange: 1
+  bombRange: 2.9
 --- !u!124 &124598315780553206
 Behaviour:
   m_ObjectHideFlags: 1
