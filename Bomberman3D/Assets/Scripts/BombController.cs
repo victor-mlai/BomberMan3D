@@ -27,10 +27,16 @@ public class BombController : MonoBehaviour {
         bc = GetComponent<BoxCollider>();
         bc.isTrigger = true;
 
-        //Vector3 fuseOffset = new Vector3(0, 1, 0);
-        //fuseObject = Instantiate(fuse, gameObject.transform.position + fuseOffset, fuse.transform.rotation);
+        Vector3 fuseOffset = new Vector3(0, 1, 0);
+        ParticleSystem ps = Instantiate(fuse, gameObject.transform.position + fuseOffset, fuse.transform.rotation);
+        ps.Stop(); // Cannot set duration whilst particle system is playing
 
-        // Explode will be called after explosionDelay seconds
+        var main = ps.main;
+        main.duration = explosionDelay;
+
+        ps.Play();
+
+        // Explode function will be called after explosionDelay seconds
         Invoke("Explode", explosionDelay);
     }
 
@@ -49,17 +55,8 @@ public class BombController : MonoBehaviour {
 
         foreach (var direction in directions)
         {
-            // Debugging
-            //GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            //sphere.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-            //Vector3 newPos = gameObject.transform.position + direction * bombRange;
-            //sphere.transform.position = newPos;
-            //
-            //Debug.Log("gameobject");
-            //Debug.Log(gameObject.transform.position);
-            //
-            //Debug.Log("result");
-            //Debug.Log(newPos);
+            Vector3 startPoint = gameObject.transform.position;
+            Vector3 endPoint = startPoint + direction * bombRange;
 
             // retains objects' info
             RaycastHit hitInfo;
@@ -67,8 +64,7 @@ public class BombController : MonoBehaviour {
             // If there is something in that direction
             if (Physics.Raycast(gameObject.transform.position, direction, out hitInfo, bombRange))
             {
-                // Display objects' tag
-                //Debug.Log(hitInfo.transform.tag);
+                endPoint = hitInfo.point;
 
                 if (hitInfo.transform.tag == "Breakable")
                 {
@@ -76,18 +72,39 @@ public class BombController : MonoBehaviour {
                 }
                 else if (hitInfo.transform.tag == "Player")
                 {
-                    //Debug.Log("TODO: End Game");
+                    // TODO: End Game
+                }
+                else if (hitInfo.transform.tag == "Bomb")
+                {
+                    // TODO: Explode the hit bomb
                 }
             }
 
+            // Create explosions from start point to end point
+            for (Vector3 curPoint = startPoint; ; curPoint += direction)
+            {
+                float dist = Vector3.Distance(curPoint, endPoint);
+                if (dist < 0.6f || dist > 30)
+                    break;
+
+                Instantiate(explosion, curPoint, Quaternion.identity);
+            }
         }
 
-        Destroy(fuseObject);
         Destroy(gameObject);
     }
 
-    void InstantiateExplosion(RaycastHit hitInfo, Vector3 startPos)
+    // Not working yet
+    IEnumerator CreateExplosion(Vector3 startPoint, Vector3 endPoint, Vector3 direction)
     {
+        for (Vector3 curPoint = startPoint; ; curPoint += direction)
+        {
+            float dist = Vector3.Distance(curPoint, endPoint);
+            if (dist < 0.6f || dist > 30)
+                break;
 
+            Instantiate(explosion, curPoint, Quaternion.identity);
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 }

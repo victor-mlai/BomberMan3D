@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Unbreakable
   - Breakable
+  - Bomb
   layers:
   - Default
   - TransparentFX
