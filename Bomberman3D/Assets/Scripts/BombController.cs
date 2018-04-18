@@ -30,7 +30,7 @@ public class BombController : MonoBehaviour {
         //Vector3 fuseOffset = new Vector3(0, 1, 0);
         //fuseObject = Instantiate(fuse, gameObject.transform.position + fuseOffset, fuse.transform.rotation);
 
-        // Explode will be called after explosionDelay seconds
+        // Explode function will be called after explosionDelay seconds
         Invoke("Explode", explosionDelay);
     }
 
@@ -50,16 +50,8 @@ public class BombController : MonoBehaviour {
         foreach (var direction in directions)
         {
             // Debugging
-            //GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            //sphere.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-            //Vector3 newPos = gameObject.transform.position + direction * bombRange;
-            //sphere.transform.position = newPos;
-            //
-            //Debug.Log("gameobject");
-            //Debug.Log(gameObject.transform.position);
-            //
-            //Debug.Log("result");
-            //Debug.Log(newPos);
+            Vector3 startPoint = gameObject.transform.position;
+            Vector3 endPoint = startPoint + direction * bombRange;
 
             // retains objects' info
             RaycastHit hitInfo;
@@ -67,8 +59,8 @@ public class BombController : MonoBehaviour {
             // If there is something in that direction
             if (Physics.Raycast(gameObject.transform.position, direction, out hitInfo, bombRange))
             {
-                // Display objects' tag
-                //Debug.Log(hitInfo.transform.tag);
+                // Create explosions from start point to end point
+                endPoint = hitInfo.point;
 
                 if (hitInfo.transform.tag == "Breakable")
                 {
@@ -80,6 +72,22 @@ public class BombController : MonoBehaviour {
                 }
             }
 
+            // Debugging code:
+            /************/
+
+            for (Vector3 curPoint = startPoint; ; curPoint += direction)
+            {
+                float dist = Vector3.Distance(curPoint, endPoint);
+                if (dist < 0.6f || dist > 30)
+                    break;
+
+                ParticleSystem sphere = Instantiate(explosion, curPoint, Quaternion.identity);
+            }
+
+            // Display objects' tag
+            //Debug.Log(hitInfo.transform.tag);
+
+            /************/
         }
 
         Destroy(fuseObject);
