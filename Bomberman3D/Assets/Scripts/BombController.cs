@@ -72,7 +72,11 @@ public class BombController : MonoBehaviour {
                 }
                 else if (hitInfo.transform.tag == "Player")
                 {
-                    //Debug.Log("TODO: End Game");
+                    // TODO: End Game
+                }
+                else if (hitInfo.transform.tag == "Bomb")
+                {
+                    // TODO: Explode the hit bomb
                 }
             }
 
@@ -87,7 +91,6 @@ public class BombController : MonoBehaviour {
             }
         }
 
-        //Destroy(fuseObject);
         Destroy(gameObject);
     }
 
