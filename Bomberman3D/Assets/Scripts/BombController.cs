@@ -22,19 +22,24 @@ public class BombController : MonoBehaviour {
 
     private ParticleSystem fuseObject;
 
+    private bool exploding;
+
     // Use this for initialization
     void Start () {
+        exploding = false;
+
         bc = GetComponent<BoxCollider>();
         bc.isTrigger = true;
 
+        // Create fuse and set its attributes
         Vector3 fuseOffset = new Vector3(0, 1, 0);
-        ParticleSystem ps = Instantiate(fuse, gameObject.transform.position + fuseOffset, fuse.transform.rotation);
-        ps.Stop(); // Cannot set duration whilst particle system is playing
+        ParticleSystem fuseObject = Instantiate(fuse, gameObject.transform.position + fuseOffset, fuse.transform.rotation);
+        fuseObject.Stop(); // Cannot set duration whilst particle system is playing
 
-        var main = ps.main;
+        var main = fuseObject.main;
         main.duration = explosionDelay;
 
-        ps.Play();
+        fuseObject.Play();
 
         // Explode function will be called after explosionDelay seconds
         Invoke("Explode", explosionDelay);
@@ -48,10 +53,15 @@ public class BombController : MonoBehaviour {
     }
 
     // destroy the object and spawn explosions!!!!
-    void Explode()
+    public void Explode()
     {
+        if (exploding)  // prevents infinte loop that would've resulted in a crash
+            return;
+        exploding = true;
+
         // x = E, z = N => directions = {N, E, S, W}
         Vector3[] directions = { new Vector3(0, 0, 1), new Vector3(1, 0, 0), new Vector3(0, 0, -1), new Vector3(-1, 0, 0) };
+        Vector3 explosionHeightOffset = new Vector3(0.0f, 0.5f);
 
         foreach (var direction in directions)
         {
@@ -66,17 +76,27 @@ public class BombController : MonoBehaviour {
             {
                 endPoint = hitInfo.point;
 
-                if (hitInfo.transform.tag == "Breakable")
+                if (hitInfo.transform.CompareTag("Breakable"))
                 {
+                    // TODO: Shatter the Wall
                     Destroy(hitInfo.transform.gameObject);
                 }
-                else if (hitInfo.transform.tag == "Player")
+                else if (hitInfo.transform.CompareTag("Bomb"))
+                {
+                    // Explode the hit bomb
+                    hitInfo.transform.GetComponent<BombController>().Explode();
+                }
+                else if (hitInfo.transform.CompareTag("Player"))
                 {
                     // TODO: End Game
                 }
-                else if (hitInfo.transform.tag == "Bomb")
+                else if (hitInfo.transform.CompareTag("Enemy"))
                 {
-                    // TODO: Explode the hit bomb
+                    // TODO: Call Enemy function OnHit()
+                }
+                else if (hitInfo.transform.CompareTag("PowerUp"))
+                {
+                    // TODO: Destroy the PowerUp
                 }
             }
 
@@ -84,13 +104,14 @@ public class BombController : MonoBehaviour {
             for (Vector3 curPoint = startPoint; ; curPoint += direction)
             {
                 float dist = Vector3.Distance(curPoint, endPoint);
-                if (dist < 0.6f || dist > 30)
+                if (dist < 0.6f || dist > bombRange)
                     break;
 
-                Instantiate(explosion, curPoint, Quaternion.identity);
+                Instantiate(explosion, curPoint - explosionHeightOffset, Quaternion.identity);
             }
         }
 
+        Destroy(fuseObject);
         Destroy(gameObject);
     }
 
