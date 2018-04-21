@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : NetworkBehaviour {
 
     private Rigidbody rb;
 
@@ -11,12 +12,19 @@ public class PlayerMovement : MonoBehaviour {
     public Camera FPCamera;
 
 	// Use this for initialization
-	void Start () {
+    public override void OnStartLocalPlayer()
+    {
         rb = GetComponent<Rigidbody>();
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
+    }
+
+    // Update is called once per frame
+    void FixedUpdate () {
+
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
         // Player Move
         float horiz = Input.GetAxisRaw("Horizontal");
         float verti = Input.GetAxisRaw("Vertical");

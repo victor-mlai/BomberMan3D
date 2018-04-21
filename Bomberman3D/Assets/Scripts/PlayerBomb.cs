@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PlayerBomb : MonoBehaviour {
+public class PlayerBomb : NetworkBehaviour {
 
     public GameObject bombPrefab;
     public float bombRange;
@@ -14,14 +15,21 @@ public class PlayerBomb : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            DropBomb();
+            CmdDropBomb();
         }
 
     }
 
-    void DropBomb()
+    [Command]
+    void CmdDropBomb()
     {
         // don't mind the position formula ...
         Vector3 position = new Vector3(
@@ -35,5 +43,8 @@ public class PlayerBomb : MonoBehaviour {
 
         // Set bombs' range
         newBomb.GetComponent<BombController>().SetBombRange(bombRange);
+
+        // Spawn the bomb on the Clients
+        NetworkServer.Spawn(newBomb);
     }
 }

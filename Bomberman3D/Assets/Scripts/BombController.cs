@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class BombController : MonoBehaviour {
+public class BombController : NetworkBehaviour {
     // [HideInInspector] means that the attribute will be hidden in the Editor
     private float bombRange;
     public void SetBombRange(float newBombRange)
