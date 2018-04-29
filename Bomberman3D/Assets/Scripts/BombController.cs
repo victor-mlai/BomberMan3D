@@ -104,7 +104,7 @@ public class BombController : MonoBehaviour {
             for (Vector3 curPoint = startPoint; ; curPoint += direction)
             {
                 float dist = Vector3.Distance(curPoint, endPoint);
-                if (dist < 0.6f || dist > bombRange)
+                if (dist < 0.6f || dist > bombRange + 1.0f)
                     break;
 
                 Instantiate(explosion, curPoint - explosionHeightOffset, Quaternion.identity);
