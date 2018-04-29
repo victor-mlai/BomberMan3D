@@ -10,8 +10,16 @@ public class PlayerMovement : MonoBehaviour {
 
     public Camera FPCamera;
 
-	// Use this for initialization
-	void Start () {
+    private float xClamp = 0.0f;
+
+    void Awake()
+    {
+        // Lock cursor to the center of the screen
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    // Use this for initialization
+    void Start () {
         rb = GetComponent<Rigidbody>();
 	}
 	
@@ -30,9 +38,26 @@ public class PlayerMovement : MonoBehaviour {
 
         // Player Rotate
         float yRot = Input.GetAxisRaw("Mouse X");
-        float xRot = Input.GetAxisRaw("Mouse Y");
+        float xRot = Input.GetAxisRaw("Mouse Y") * 5;
 
         rb.MoveRotation(rb.rotation * Quaternion.Euler(0, yRot * 5, 0));    // rotate capsule left-right
-        FPCamera.transform.Rotate(-xRot * 5, 0, 0); // rotate First Person Camera up-down
+
+        /* rotate camera up-down */
+        Vector3 targetRotCam = FPCamera.transform.eulerAngles;
+        targetRotCam.x -= xRot;
+        xClamp -= xRot;
+
+        if (xClamp > 90)
+        {
+            xClamp = 90;
+            targetRotCam.x = 90;
+        }
+        else if (xClamp < -90)
+        {
+            xClamp = -90;
+            targetRotCam.x = 270;
+        }
+
+        FPCamera.transform.rotation = Quaternion.Euler(targetRotCam);
     }
 }
