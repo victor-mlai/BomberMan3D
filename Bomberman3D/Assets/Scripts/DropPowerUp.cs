@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DropPowerUp : MonoBehaviour {
+    [Range(0.0f, 1.0f)]
     public float powerUpProbability;
+
     public GameObject[] powerUp;
 
     public void DropRandomPowerUp()

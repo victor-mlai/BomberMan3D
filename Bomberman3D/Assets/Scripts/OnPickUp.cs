@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class OnPickUp : MonoBehaviour {
-
     public float pickUpDuration;
 
     private void OnTriggerEnter(Collider other)

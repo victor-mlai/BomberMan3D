@@ -37,16 +37,18 @@ public class PlayerMovement : MonoBehaviour {
         rb.MovePosition(rb.position + velocity);
 
         // Player Rotate
-        float yRot = Input.GetAxisRaw("Mouse X");
+        float yRot = Input.GetAxisRaw("Mouse X") * 5;
         float xRot = Input.GetAxisRaw("Mouse Y") * 5;
 
-        rb.MoveRotation(rb.rotation * Quaternion.Euler(0, yRot * 5, 0));    // rotate capsule left-right
+        // rotate capsule left-right
+        rb.MoveRotation(rb.rotation * Quaternion.Euler(0, yRot, 0));
 
-        /* rotate camera up-down */
+        // rotate camera up-down
         Vector3 targetRotCam = FPCamera.transform.eulerAngles;
         targetRotCam.x -= xRot;
         xClamp -= xRot;
 
+        // clamp the up-down rotation
         if (xClamp > 90)
         {
             xClamp = 90;
