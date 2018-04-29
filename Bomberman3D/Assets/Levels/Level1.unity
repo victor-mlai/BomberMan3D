@@ -2862,6 +2862,53 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 00b1c77013994bf40a4adf3c2180180e, type: 2}
   m_IsPrefabParent: 0
+--- !u!1001 &2075083817
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4038203351667636, guid: b5f592df156e078489d3afb6eb229876, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 4038203351667636, guid: b5f592df156e078489d3afb6eb229876, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 1.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 4038203351667636, guid: b5f592df156e078489d3afb6eb229876, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4038203351667636, guid: b5f592df156e078489d3afb6eb229876, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0.41600218
+      objectReference: {fileID: 0}
+    - target: {fileID: 4038203351667636, guid: b5f592df156e078489d3afb6eb229876, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0.17319411
+      objectReference: {fileID: 0}
+    - target: {fileID: 4038203351667636, guid: b5f592df156e078489d3afb6eb229876, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0.34301308
+      objectReference: {fileID: 0}
+    - target: {fileID: 4038203351667636, guid: b5f592df156e078489d3afb6eb229876, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.8241893
+      objectReference: {fileID: 0}
+    - target: {fileID: 4038203351667636, guid: b5f592df156e078489d3afb6eb229876, type: 2}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114082127468400666, guid: b5f592df156e078489d3afb6eb229876,
+        type: 2}
+      propertyPath: pickUpDuration
+      value: 10
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: b5f592df156e078489d3afb6eb229876, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &2097912872
 Prefab:
   m_ObjectHideFlags: 0
@@ -3088,6 +3135,17 @@ Prefab:
     - target: {fileID: 1016460318498270, guid: 00b1c77013994bf40a4adf3c2180180e, type: 2}
       propertyPath: m_Name
       value: Breakable Cube (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114651378637289348, guid: 00b1c77013994bf40a4adf3c2180180e,
+        type: 2}
+      propertyPath: powerUp.Array.data[0]
+      value: 
+      objectReference: {fileID: 1394485395294234, guid: b5f592df156e078489d3afb6eb229876,
+        type: 2}
+    - target: {fileID: 114651378637289348, guid: 00b1c77013994bf40a4adf3c2180180e,
+        type: 2}
+      propertyPath: powerUpProbability
+      value: 0.9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 00b1c77013994bf40a4adf3c2180180e, type: 2}

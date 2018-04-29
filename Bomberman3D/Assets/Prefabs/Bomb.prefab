@@ -110,4 +110,4 @@ MonoBehaviour:
   explosion: {fileID: 198000012942003240, guid: ecdd96beb7f93494880c052dfccf9dc1,
     type: 2}
   fuseObject: {fileID: 1000012560919920, guid: 85a8865d1bf4a63478038fae23776de8, type: 2}
-  explosionDelay: 5
+  explosionDelay: 2.5

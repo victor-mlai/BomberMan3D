@@ -70,7 +70,9 @@ public class BombController : MonoBehaviour {
 
                 if (hitInfo.transform.CompareTag("Breakable"))
                 {
+                    hitInfo.transform.GetComponent<DropPowerUp>().DropRandomPowerUp();
                     // TODO: Shatter the Wall
+
                     Destroy(hitInfo.transform.gameObject);
                 }
                 else if (hitInfo.transform.CompareTag("Bomb"))
@@ -88,10 +90,15 @@ public class BombController : MonoBehaviour {
                 }
                 else if (hitInfo.transform.CompareTag("PowerUp"))
                 {
-                    // TODO: Destroy the PowerUp
+                    // Destroy the PowerUp
+                    Destroy(hitInfo.transform.gameObject);
                 }
             }
 
+            // almost working
+            //StartCoroutine( CreateExplosion(startPoint, endPoint, direction) );
+
+            
             // Create explosions from start point to end point
             for (Vector3 curPoint = startPoint; ; curPoint += direction)
             {
@@ -101,24 +108,30 @@ public class BombController : MonoBehaviour {
 
                 Instantiate(explosion, curPoint - explosionHeightOffset, Quaternion.identity);
             }
+            
         }
 
         Destroy(fuseObject);
-
         Destroy(gameObject);
+
+        //GetComponentInChildren<MeshRenderer>().enabled = false;
+        //GetComponentInChildren<Collider>().enabled = false;
+        //Destroy(gameObject, 2.0f);
     }
 
     // Not working yet
     IEnumerator CreateExplosion(Vector3 startPoint, Vector3 endPoint, Vector3 direction)
     {
+        Vector3 explosionHeightOffset = new Vector3(0.0f, 0.5f, 0.0f);
+
         for (Vector3 curPoint = startPoint; ; curPoint += direction)
         {
             float dist = Vector3.Distance(curPoint, endPoint);
-            if (dist < 0.6f || dist > 30)
+            if (dist < 0.6f || dist > bombRange + 1.0f)
                 break;
 
-            Instantiate(explosion, curPoint, Quaternion.identity);
-            yield return new WaitForSeconds(0.1f);
+            Instantiate(explosion, curPoint - explosionHeightOffset, Quaternion.identity);
+            yield return new WaitForSeconds(0.2f);
         }
     }
 }
