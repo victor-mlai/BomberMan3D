@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31fed88d7afa30547b243b39b96bcb0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fuse: {fileID: 198000011441735220, guid: 85a8865d1bf4a63478038fae23776de8, type: 2}
   explosion: {fileID: 198000012942003240, guid: ecdd96beb7f93494880c052dfccf9dc1,
     type: 2}
-  explosionDelay: 2.5
+  fuseObject: {fileID: 1000012560919920, guid: 85a8865d1bf4a63478038fae23776de8, type: 2}
+  explosionDelay: 5

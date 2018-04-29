@@ -10,8 +10,8 @@ public class BombController : MonoBehaviour {
         bombRange = newBombRange;
     }
 
-    public ParticleSystem fuse;
     public ParticleSystem explosion;
+    public GameObject fuseObject;
 
     // SerializeField means that Unity will create a Field in the Editor so you can modify the attribute
     // click on Bomb prefab and you will see the field under "BombController" Component
@@ -19,8 +19,6 @@ public class BombController : MonoBehaviour {
     private float explosionDelay;
 
     private BoxCollider bc;
-
-    private ParticleSystem fuseObject;
 
     private bool exploding;
 
@@ -31,23 +29,17 @@ public class BombController : MonoBehaviour {
         bc = GetComponent<BoxCollider>();
         bc.isTrigger = true;
 
-        // Create fuse and set its attributes
+        // Create fuse
         Vector3 fuseOffset = new Vector3(0, 1, 0);
-        ParticleSystem fuseObject = Instantiate(fuse, gameObject.transform.position + fuseOffset, fuse.transform.rotation);
-        fuseObject.Stop(); // Cannot set duration whilst particle system is playing
-
-        var main = fuseObject.main;
-        main.duration = explosionDelay;
-
-        fuseObject.Play();
+        fuseObject = Instantiate(fuseObject, gameObject.transform.position + fuseOffset, fuseObject.transform.rotation);
 
         // Explode function will be called after explosionDelay seconds
         Invoke("Explode", explosionDelay);
     }
 
-    private void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
-        // if the Player exits the Trigger, the Trigger becomes a Collider
+        // if the Player exits the Trigger, the player won't be able to go back
         if (other.gameObject.tag.Equals("Player"))
             bc.isTrigger = false;
     }
@@ -112,6 +104,7 @@ public class BombController : MonoBehaviour {
         }
 
         Destroy(fuseObject);
+
         Destroy(gameObject);
     }
 
