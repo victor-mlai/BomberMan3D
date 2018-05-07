@@ -5,8 +5,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private Rigidbody rb;
 
-    [SerializeField]
-    private float Speed = 5f;
+    public float Speed = 5f;
 
     public Camera FPCamera;
 

@@ -22,10 +22,10 @@ GameObject:
   - component: {fileID: 23467814424435494}
   - component: {fileID: 33993140539242744}
   - component: {fileID: 135914072176823670}
-  - component: {fileID: 114082127468400666}
+  - component: {fileID: 114844421275857478}
   m_Layer: 0
-  m_Name: PowerUp
-  m_TagString: Untagged
+  m_Name: BombRange
+  m_TagString: PowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1394485395294234}
   m_LocalRotation: {x: -0.41600218, y: -0.17319411, z: -0.34301308, w: 0.8241893}
-  m_LocalPosition: {x: 0.72, y: 1.56, z: 0}
+  m_LocalPosition: {x: 1.1181353, y: 0.4611084, z: 4.084486}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
@@ -57,7 +57,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 123ac6dc79004e54b8b352a7e64acdca, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,7 +84,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1394485395294234}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114082127468400666
+--- !u!114 &114844421275857478
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -92,10 +92,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1394485395294234}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6424b9bf22ef45d43a929db070c3cf94, type: 3}
+  m_Script: {fileID: 11500000, guid: e8135217b6fd0524487b59612ed9e251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickUpDuration: 10
+  rangeStep: 2
+  maxRange: 15
 --- !u!135 &135914072176823670
 SphereCollider:
   m_ObjectHideFlags: 1

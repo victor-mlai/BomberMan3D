@@ -6,6 +6,9 @@ public class PlayerBomb : MonoBehaviour {
 
     public GameObject bombPrefab;
     public float bombRange;
+    public int maxBombs;    // max number of bombs the player can drop
+
+    private int bombCount = 0;
 
     // Use this for initialization
     void Start () {
@@ -23,7 +26,8 @@ public class PlayerBomb : MonoBehaviour {
 
     void DropBomb()
     {
-        // TODO: DropBomb only if there is no bomb here already
+        if (bombCount >= maxBombs)
+            return;
 
         // don't mind the position formula ...
         Vector3 position = new Vector3(
@@ -32,6 +36,7 @@ public class PlayerBomb : MonoBehaviour {
             (Mathf.Floor((gameObject.transform.position.z) / 2) + Mathf.Ceil((gameObject.transform.position.z) / 2))
             );
 
+        // TODO: DropBomb only if there is no bomb here already
         // TODO: if position is inside a collider => don't create the bomb
         //if (Physics.CheckSphere(position, 0.001f, LayerMask.NameToLayer("Bomb")))
         //    return;
@@ -41,5 +46,13 @@ public class PlayerBomb : MonoBehaviour {
 
         // Set bombs' range
         newBomb.GetComponent<BombController>().SetBombRange(bombRange);
+
+        bombCount++;
+        Invoke("DecrementBombCount", newBomb.GetComponent<BombController>().GetExplosionDelay());
+    }
+
+    void DecrementBombCount()
+    {
+        bombCount--;
     }
 }

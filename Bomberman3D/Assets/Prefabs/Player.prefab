@@ -259,7 +259,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bombPrefab: {fileID: 1074927380792658, guid: 69ca4d88976087a42a9292d4241fb993, type: 2}
-  bombRange: 5.1
+  bombRange: 2.9
+  maxBombs: 1
 --- !u!124 &124598315780553206
 Behaviour:
   m_ObjectHideFlags: 1

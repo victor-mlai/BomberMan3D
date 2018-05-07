@@ -1,8 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class OnPickUp : MonoBehaviour {
+public class PlayerSpeedScript : MonoBehaviour
+{
     public float pickUpDuration;
 
     private void OnTriggerEnter(Collider other)
@@ -21,14 +21,16 @@ public class OnPickUp : MonoBehaviour {
         GetComponent<MeshRenderer>().enabled = false;
         GetComponent<SphereCollider>().enabled = false;
 
-        // apply behaviour on player
-        player.GetComponent<PlayerBomb>().bombRange += 2.0f;
+        // increase player speed
+        float speed = player.GetComponent<PlayerMovement>().Speed;
+        if (speed < 6.0f)
+            player.GetComponent<PlayerMovement>().Speed += 3.0f;
 
         // wait for pickUpDuration seconds
         yield return new WaitForSeconds(pickUpDuration);
 
         // undo effect
-        player.GetComponent<PlayerBomb>().bombRange -= 2.0f;
+        player.GetComponent<PlayerMovement>().Speed = speed;
 
         // destroy pickup item
         Destroy(gameObject);

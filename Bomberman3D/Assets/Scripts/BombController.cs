@@ -17,6 +17,7 @@ public class BombController : MonoBehaviour {
     // click on Bomb prefab and you will see the field under "BombController" Component
     [SerializeField]
     private float explosionDelay;
+    public float GetExplosionDelay() { return explosionDelay; }
 
     private BoxCollider bc;
 
@@ -70,15 +71,18 @@ public class BombController : MonoBehaviour {
 
                 if (hitInfo.transform.CompareTag("Breakable"))
                 {
-                    hitInfo.transform.GetComponent<DropPowerUp>().DropRandomPowerUp();
-                    // TODO: Shatter the Wall
-
-                    Destroy(hitInfo.transform.gameObject);
+                    // The Breakable creates an effect, drops a random PowerUp and it destrois itself
+                    hitInfo.transform.gameObject.GetComponent<ShatterBreakable>().Shatter();
                 }
                 else if (hitInfo.transform.CompareTag("Bomb"))
                 {
                     // Explode the hit bomb
                     hitInfo.transform.GetComponent<BombController>().Explode();
+                }
+                else if (hitInfo.transform.CompareTag("PowerUp"))
+                {
+                    // Destroy the PowerUp
+                    Destroy(hitInfo.transform.gameObject);
                 }
                 else if (hitInfo.transform.CompareTag("Player"))
                 {
@@ -87,11 +91,6 @@ public class BombController : MonoBehaviour {
                 else if (hitInfo.transform.CompareTag("Enemy"))
                 {
                     // TODO: Call Enemy function OnHit()
-                }
-                else if (hitInfo.transform.CompareTag("PowerUp"))
-                {
-                    // Destroy the PowerUp
-                    Destroy(hitInfo.transform.gameObject);
                 }
             }
 

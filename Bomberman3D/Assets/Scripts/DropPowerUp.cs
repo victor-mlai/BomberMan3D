@@ -6,16 +6,17 @@ public class DropPowerUp : MonoBehaviour {
     [Range(0.0f, 1.0f)]
     public float powerUpProbability;
 
-    public GameObject[] powerUp;
+    public GameObject[] powerUps;
 
     public void DropRandomPowerUp()
     {
         if (Random.value <= powerUpProbability)
         {
-            // TODO pick a random powerUp
+            // pick a random powerUp
+            int rand_index = Random.Range(0, powerUps.Length);
 
             // create the powerUp
-            Instantiate(powerUp[0], gameObject.transform.position, powerUp[0].transform.rotation);
+            Instantiate(powerUps[rand_index], gameObject.transform.position, powerUps[rand_index].transform.rotation);
         }
     }
 }
