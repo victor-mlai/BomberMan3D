@@ -9,7 +9,7 @@ public class PauseMenu : MonoBehaviour {
 
     public GameObject PauseMenuUI;
 
-    public Scene MenuLevel;
+    public string MenuLevelName;
 
     // Update is called once per frame
     void Update () {
@@ -39,11 +39,15 @@ public class PauseMenu : MonoBehaviour {
         // TODO: Disconnect from server
 
         // Load Menu Level
-        SceneManager.LoadScene(MenuLevel.name);
+        SceneManager.LoadScene(MenuLevelName);
     }
 
     public void Exit()
     {
-        Application.Quit();
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
 }
