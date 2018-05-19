@@ -72,7 +72,7 @@ public class BombController : MonoBehaviour {
                 if (hitInfo.transform.CompareTag("Breakable"))
                 {
                     // The Breakable creates an effect, drops a random PowerUp and it destrois itself
-                    hitInfo.transform.gameObject.GetComponent<ShatterBreakable>().Shatter();
+                    hitInfo.transform.gameObject.GetComponent<IBreakable>().Break();
                 }
                 else if (hitInfo.transform.CompareTag("Bomb"))
                 {

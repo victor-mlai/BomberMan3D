@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShatterBreakable : MonoBehaviour {
+public class ShatterBreakable : MonoBehaviour, IBreakable {
 
     public GameObject effect;
 
-    public void Shatter()
+    public void Break()
     {
         Instantiate(effect, transform.position, transform.rotation);
 

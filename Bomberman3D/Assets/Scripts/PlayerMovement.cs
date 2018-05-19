@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour {
 
     private float xClamp = 0.0f;
 
+    private bool isInputDisabled = false;
+
     void Awake()
     {
         // Lock cursor to the center of the screen
@@ -24,6 +26,9 @@ public class PlayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        if (isInputDisabled || PauseMenu.GameIsPaused)
+            return;
+
         // Player Move
         float horiz = Input.GetAxisRaw("Horizontal");
         float verti = Input.GetAxisRaw("Vertical");
@@ -48,17 +53,22 @@ public class PlayerMovement : MonoBehaviour {
         xClamp -= xRot;
 
         // clamp the up-down rotation
-        if (xClamp > 90)
+        if (xClamp > 60)
         {
-            xClamp = 90;
-            targetRotCam.x = 90;
+            xClamp = 60;
+            targetRotCam.x = 60;
         }
-        else if (xClamp < -90)
+        else if (xClamp < -30)
         {
-            xClamp = -90;
-            targetRotCam.x = 270;
+            xClamp = -30;
+            targetRotCam.x = 330;
         }
 
         FPCamera.transform.rotation = Quaternion.Euler(targetRotCam);
+    }
+
+    public void DisableInput()
+    {
+        isInputDisabled = true;
     }
 }
