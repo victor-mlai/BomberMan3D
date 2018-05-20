@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 public class ShatterBreakable : NetworkBehaviour, IBreakable {
 
     public GameObject effect;
-
+    
     public void Break()
     {
         Instantiate(effect, transform.position, transform.rotation);
