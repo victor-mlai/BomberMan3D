@@ -11,7 +11,8 @@ public class PlayerMovement : MonoBehaviour {
 
     private float xClamp = 0.0f;
 
-    private bool isInputDisabled = false;
+    [HideInInspector]
+    public bool isInputDisabled = false;
 
     void Awake()
     {
@@ -65,10 +66,5 @@ public class PlayerMovement : MonoBehaviour {
         }
 
         FPCamera.transform.rotation = Quaternion.Euler(targetRotCam);
-    }
-
-    public void DisableInput()
-    {
-        isInputDisabled = true;
     }
 }

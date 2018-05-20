@@ -9,16 +9,14 @@ public class PlayerBomb : MonoBehaviour {
     public int maxBombs;    // max number of bombs the player can drop
 
     private int bombCount = 0;
-
-    // Use this for initialization
-    void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            if (GetComponent<PlayerMovement>().isInputDisabled || PauseMenu.GameIsPaused)
+                return;
+
             DropBomb();
         }
     }

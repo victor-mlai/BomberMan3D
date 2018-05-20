@@ -9,6 +9,7 @@ TagManager:
   - Bomb
   - PowerUp
   - Enemy
+  - GameManager
   layers:
   - Default
   - TransparentFX

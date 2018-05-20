@@ -65,7 +65,7 @@ public class BombController : MonoBehaviour {
             RaycastHit hitInfo;
 
             // If there is something in that direction
-            if (Physics.Raycast(gameObject.transform.position, direction, out hitInfo, bombRange))
+            if (Physics.Raycast(startPoint, direction, out hitInfo, bombRange))
             {
                 endPoint = hitInfo.point;
 
@@ -86,11 +86,13 @@ public class BombController : MonoBehaviour {
                 }
                 else if (hitInfo.transform.CompareTag("Player"))
                 {
-                    // TODO: End Game
+                    // Call KillPlayer's function Kill()
+                    hitInfo.transform.GetComponent<IKillable>().Kill();
                 }
                 else if (hitInfo.transform.CompareTag("Enemy"))
                 {
-                    // TODO: Call Enemy function OnHit()
+                    // Call Enemy's function Kill() .... when it will be ready
+                    hitInfo.transform.GetComponent<IKillable>().Kill();
                 }
             }
 
