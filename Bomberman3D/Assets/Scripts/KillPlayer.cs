@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class KillPlayer : MonoBehaviour, IKillable {
+public class KillPlayer : NetworkBehaviour, IKillable {
 
     private GameObject GameManager;
 
@@ -13,6 +14,11 @@ public class KillPlayer : MonoBehaviour, IKillable {
 
     public void Kill()
     {
+        if(!isLocalPlayer)
+        {
+            return;
+        }
+
         GetComponent<PlayerMovement>().isInputDisabled = true;
 
         GameManager.GetComponent<GameManager>().GameFinished = true;

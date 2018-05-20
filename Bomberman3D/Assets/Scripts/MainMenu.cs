@@ -1,16 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : NetworkBehaviour {
 
     public string LevelName;
+
+    public NetworkManager NetworkManager;
+
+    public void Host()
+    {
+        //Start as host
+        NetworkManager.StartHost();
+        Connect();
+    }
 
     public void Connect()
     {
         // TODO: Connect to server
-
+        NetworkManager.StartClient();
         // Load Menu Level
         SceneManager.LoadScene(LevelName);
     }

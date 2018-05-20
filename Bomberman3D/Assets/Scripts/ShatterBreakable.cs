@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class ShatterBreakable : MonoBehaviour, IBreakable {
+public class ShatterBreakable : NetworkBehaviour, IBreakable {
 
     public GameObject effect;
 
@@ -12,6 +13,12 @@ public class ShatterBreakable : MonoBehaviour, IBreakable {
 
         GetComponent<DropPowerUp>().DropRandomPowerUp();
 
-        Destroy(gameObject);
+        CmdDestroy();
+    }
+
+    [Command]
+    public void CmdDestroy()
+    {
+        Network.Destroy(gameObject);
     }
 }

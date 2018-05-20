@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : NetworkBehaviour {
 
     private Rigidbody rb;
 
@@ -20,15 +21,31 @@ public class PlayerMovement : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    public void Start()
+    {
+        if(isLocalPlayer)
+        {
+            return;
+        }
+
+        FPCamera.enabled = false;
+    }
+
     // Use this for initialization
-    void Start () {
-        rb = GetComponent<Rigidbody>();
+    public override void OnStartLocalPlayer()
+    {
+         rb = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
         if (isInputDisabled || PauseMenu.GameIsPaused)
             return;
+
+        if(!isLocalPlayer)
+        {
+            return;
+        }
 
         // Player Move
         float horiz = Input.GetAxisRaw("Horizontal");
