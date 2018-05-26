@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class BombController : MonoBehaviour {
+public class BombController : NetworkBehaviour {
     // [HideInInspector] means that the attribute will be hidden in the Editor
     private float bombRange;
     public void SetBombRange(float newBombRange)
@@ -10,17 +11,16 @@ public class BombController : MonoBehaviour {
         bombRange = newBombRange;
     }
 
-    public ParticleSystem fuse;
     public ParticleSystem explosion;
+    public GameObject fuseObject;
 
     // SerializeField means that Unity will create a Field in the Editor so you can modify the attribute
     // click on Bomb prefab and you will see the field under "BombController" Component
     [SerializeField]
     private float explosionDelay;
+    public float GetExplosionDelay() { return explosionDelay; }
 
     private BoxCollider bc;
-
-    private ParticleSystem fuseObject;
 
     private bool exploding;
 
@@ -31,23 +31,17 @@ public class BombController : MonoBehaviour {
         bc = GetComponent<BoxCollider>();
         bc.isTrigger = true;
 
-        // Create fuse and set its attributes
+        // Create fuse
         Vector3 fuseOffset = new Vector3(0, 1, 0);
-        ParticleSystem fuseObject = Instantiate(fuse, gameObject.transform.position + fuseOffset, fuse.transform.rotation);
-        fuseObject.Stop(); // Cannot set duration whilst particle system is playing
-
-        var main = fuseObject.main;
-        main.duration = explosionDelay;
-
-        fuseObject.Play();
+        fuseObject = Instantiate(fuseObject, gameObject.transform.position + fuseOffset, fuseObject.transform.rotation);
 
         // Explode function will be called after explosionDelay seconds
         Invoke("Explode", explosionDelay);
     }
 
-    private void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
-        // if the Player exits the Trigger, the Trigger becomes a Collider
+        // if the Player exits the Trigger, the player won't be able to go back
         if (other.gameObject.tag.Equals("Player"))
             bc.isTrigger = false;
     }
@@ -72,34 +66,41 @@ public class BombController : MonoBehaviour {
             RaycastHit hitInfo;
 
             // If there is something in that direction
-            if (Physics.Raycast(gameObject.transform.position, direction, out hitInfo, bombRange))
+            if (Physics.Raycast(startPoint, direction, out hitInfo, bombRange))
             {
                 endPoint = hitInfo.point;
 
                 if (hitInfo.transform.CompareTag("Breakable"))
                 {
-                    // TODO: Shatter the Wall
-                    Destroy(hitInfo.transform.gameObject);
+                    // The Breakable creates an effect, drops a random PowerUp and it destrois itself
+                    hitInfo.transform.gameObject.GetComponent<IBreakable>().Break();
                 }
                 else if (hitInfo.transform.CompareTag("Bomb"))
                 {
                     // Explode the hit bomb
                     hitInfo.transform.GetComponent<BombController>().Explode();
                 }
+                else if (hitInfo.transform.CompareTag("PowerUp"))
+                {
+                    // Destroy the PowerUp
+                    Destroy(hitInfo.transform.gameObject);
+                }
                 else if (hitInfo.transform.CompareTag("Player"))
                 {
-                    // TODO: End Game
+                    // Call KillPlayer's function Kill()
+                    hitInfo.transform.GetComponent<IKillable>().Kill();
                 }
                 else if (hitInfo.transform.CompareTag("Enemy"))
                 {
-                    // TODO: Call Enemy function OnHit()
-                }
-                else if (hitInfo.transform.CompareTag("PowerUp"))
-                {
-                    // TODO: Destroy the PowerUp
+                    // Call Enemy's function Kill() .... when it will be ready
+                    hitInfo.transform.GetComponent<IKillable>().Kill();
                 }
             }
 
+            // almost working
+            //StartCoroutine( CreateExplosion(startPoint, endPoint, direction) );
+
+            
             // Create explosions from start point to end point
             for (Vector3 curPoint = startPoint; ; curPoint += direction)
             {
@@ -109,23 +110,30 @@ public class BombController : MonoBehaviour {
 
                 Instantiate(explosion, curPoint - explosionHeightOffset, Quaternion.identity);
             }
+            
         }
 
         Destroy(fuseObject);
         Destroy(gameObject);
+
+        //GetComponentInChildren<MeshRenderer>().enabled = false;
+        //GetComponentInChildren<Collider>().enabled = false;
+        //Destroy(gameObject, 2.0f);
     }
 
     // Not working yet
     IEnumerator CreateExplosion(Vector3 startPoint, Vector3 endPoint, Vector3 direction)
     {
+        Vector3 explosionHeightOffset = new Vector3(0.0f, 0.5f, 0.0f);
+
         for (Vector3 curPoint = startPoint; ; curPoint += direction)
         {
             float dist = Vector3.Distance(curPoint, endPoint);
-            if (dist < 0.6f || dist > 30)
+            if (dist < 0.6f || dist > bombRange + 1.0f)
                 break;
 
-            Instantiate(explosion, curPoint, Quaternion.identity);
-            yield return new WaitForSeconds(0.1f);
+            Instantiate(explosion, curPoint - explosionHeightOffset, Quaternion.identity);
+            yield return new WaitForSeconds(0.2f);
         }
     }
 }

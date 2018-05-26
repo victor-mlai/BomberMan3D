@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : NetworkBehaviour {
 
     private Rigidbody rb;
 
-    [SerializeField]
-    private float Speed = 5f;
+    public float Speed = 5f;
 
     public Camera FPCamera;
 
     private float xClamp = 0.0f;
+
+    [HideInInspector]
+    public bool isInputDisabled = false;
 
     void Awake()
     {
@@ -18,13 +21,32 @@ public class PlayerMovement : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    public void Start()
+    {
+        if(isLocalPlayer)
+        {
+            return;
+        }
+
+        FPCamera.enabled = false;
+    }
+
     // Use this for initialization
-    void Start () {
-        rb = GetComponent<Rigidbody>();
+    public override void OnStartLocalPlayer()
+    {
+         rb = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        if (isInputDisabled || PauseMenu.GameIsPaused)
+            return;
+
+        if(!isLocalPlayer)
+        {
+            return;
+        }
+
         // Player Move
         float horiz = Input.GetAxisRaw("Horizontal");
         float verti = Input.GetAxisRaw("Vertical");
@@ -37,25 +59,27 @@ public class PlayerMovement : MonoBehaviour {
         rb.MovePosition(rb.position + velocity);
 
         // Player Rotate
-        float yRot = Input.GetAxisRaw("Mouse X");
+        float yRot = Input.GetAxisRaw("Mouse X") * 5;
         float xRot = Input.GetAxisRaw("Mouse Y") * 5;
 
-        rb.MoveRotation(rb.rotation * Quaternion.Euler(0, yRot * 5, 0));    // rotate capsule left-right
+        // rotate capsule left-right
+        rb.MoveRotation(rb.rotation * Quaternion.Euler(0, yRot, 0));
 
-        /* rotate camera up-down */
+        // rotate camera up-down
         Vector3 targetRotCam = FPCamera.transform.eulerAngles;
         targetRotCam.x -= xRot;
         xClamp -= xRot;
 
-        if (xClamp > 90)
+        // clamp the up-down rotation
+        if (xClamp > 60)
         {
-            xClamp = 90;
-            targetRotCam.x = 90;
+            xClamp = 60;
+            targetRotCam.x = 60;
         }
-        else if (xClamp < -90)
+        else if (xClamp < -30)
         {
-            xClamp = -90;
-            targetRotCam.x = 270;
+            xClamp = -30;
+            targetRotCam.x = 330;
         }
 
         FPCamera.transform.rotation = Quaternion.Euler(targetRotCam);

@@ -1,29 +1,40 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PlayerBomb : MonoBehaviour {
+public class PlayerBomb : NetworkBehaviour
+{
 
     public GameObject bombPrefab;
     public float bombRange;
+    public int maxBombs;    // max number of bombs the player can drop
 
-    // Use this for initialization
-    void Start () {
-		
-	}
+    private int bombCount = 0;
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.Space))
+
+        if (!isLocalPlayer)
         {
-            DropBomb();
+            return;
         }
 
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (GetComponent<PlayerMovement>().isInputDisabled || PauseMenu.GameIsPaused)
+                return;
+
+            CmdDropBomb();
+        }
     }
 
-    void DropBomb()
+    [Command]
+    void CmdDropBomb()
     {
-        // TODO: DropBomb only if there is no bomb here already
+        if (bombCount >= maxBombs)
+            return;
 
         // don't mind the position formula ...
         Vector3 position = new Vector3(
@@ -32,6 +43,7 @@ public class PlayerBomb : MonoBehaviour {
             (Mathf.Floor((gameObject.transform.position.z) / 2) + Mathf.Ceil((gameObject.transform.position.z) / 2))
             );
 
+        // TODO: DropBomb only if there is no bomb here already
         // TODO: if position is inside a collider => don't create the bomb
         //if (Physics.CheckSphere(position, 0.001f, LayerMask.NameToLayer("Bomb")))
         //    return;
@@ -41,5 +53,15 @@ public class PlayerBomb : MonoBehaviour {
 
         // Set bombs' range
         newBomb.GetComponent<BombController>().SetBombRange(bombRange);
+
+        bombCount++;
+        Invoke("DecrementBombCount", newBomb.GetComponent<BombController>().GetExplosionDelay());
+
+        NetworkServer.Spawn(newBomb);
+    }
+
+    void DecrementBombCount()
+    {
+        bombCount--;
     }
 }

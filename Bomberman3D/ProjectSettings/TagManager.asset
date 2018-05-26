@@ -7,6 +7,9 @@ TagManager:
   - Unbreakable
   - Breakable
   - Bomb
+  - PowerUp
+  - Enemy
+  - GameManager
   layers:
   - Default
   - TransparentFX
